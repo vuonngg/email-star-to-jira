@@ -51,7 +51,8 @@ public class InputRunner implements CommandLineRunner {
         // 6. EMAIL API CLIENT SECRET
         System.out.print("6. EMAIL API CLIENT SECRET: ");
         config.setEmailClientSecret(scanner.nextLine().trim());
-        System.out.print("7. EMAIL REFRESH TOKEN : ");
+
+        System.out.print("7. EMAIL REFRESH TOKEN: ");
         config.setEmailRefreshToken(scanner.nextLine().trim());
 
         System.out.println("-------------------------------------------\n");
