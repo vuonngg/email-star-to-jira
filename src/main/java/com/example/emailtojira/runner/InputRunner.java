@@ -40,8 +40,9 @@ public class InputRunner implements CommandLineRunner {
         System.out.print("4. JIRA API TOKEN: ");
         config.setJiraToken(scanner.nextLine().trim());
 
-        // --- PHẦN 2: CẤU HÌNH EMAIL API (2 THÔNG SỐ) ---
+
         System.out.println("\n--- THÔNG TIN EMAIL ---");
+
 
         // 5. EMAIL API CLIENT ID
         System.out.print("5. EMAIL API CLIENT ID: ");

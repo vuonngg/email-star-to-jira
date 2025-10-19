@@ -6,6 +6,7 @@ import com.example.emailtojira.model.JiraCreateTask;
 import com.example.emailtojira.service.service.JiraService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.jsoup.Jsoup;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -46,7 +47,7 @@ public class JiraServiceImpl implements JiraService {
         try {
             // Chuyển đổi đối tượng Java thành JSON String
             String jsonBody = objectMapper.writeValueAsString(jiraTask);
-            System.out.println("[JIRA DEBUG] Payload gửi Jira:\n" + jsonBody);
+
             HttpEntity<String> request = new HttpEntity<>(jsonBody, headers);
 
             System.out.println("[JIRA SERVICE] Đang gửi Issue: " + detail.getTieuDe());
@@ -102,14 +103,14 @@ public class JiraServiceImpl implements JiraService {
         JiraCreateTask.IssueType issueType = new JiraCreateTask.IssueType("Task");
 
         // 3. Tạo Fields
-        String summary = "[Email] " + detail.getTieuDe() + " (Từ: " + detail.getNguoiGui() + ")";
+        String summary = "Email: " + detail.getTieuDe();
+        String cleanedBody = cleanAndFormatHtml(detail.getNoiDung()); // Gọi hàm lọc
 
         // Description: Nội dung email được định dạng
-        String description = "Issue được tạo tự động từ email:\n\n" +
-                "Email ID: " + detail.getId() + "\n" +
-                "Người gửi: " + detail.getNguoiGui() + "\n" +
+        String description =
+                cleanedBody + "\n" +
                 "----------------------------------------\n" +
-                detail.getNoiDung();
+                "Người gửi: " + detail.getNguoiGui();
 
         JiraCreateTask.Fields fields = new JiraCreateTask.Fields(
                 summary,
@@ -117,8 +118,28 @@ public class JiraServiceImpl implements JiraService {
                 project,
                 issueType
         );
-
         // 4. Tạo đối tượng Task hoàn chỉnh
         return new JiraCreateTask(fields);
+    }
+
+    private String cleanAndFormatHtml(String rawHtml) {
+        if (rawHtml == null || rawHtml.isEmpty()) {
+            return "Nội dung email trống.";
+        }
+        // 1. LỌC HTML VÀ CHUYỂN ENTITY: Jsoup không chỉ loại bỏ thẻ mà còn chuyển đổi
+        String cleanText = org.jsoup.Jsoup.parse(rawHtml).text();
+        // 2. LÀM SẠCH KÝ TỰ ĐIỀU KHIỂN & KHOẢNG TRẮNG DƯ THỪA
+        // a. Loại bỏ các ký tự \r, \t, và nhiều khoảng trắng liên tiếp, giữ lại \n
+        String cleanedText = cleanText.replaceAll("[\r\t]+", " ").replaceAll(" +", " ");
+        // 3. ĐỊNH DẠNG: Thêm ngắt đoạn để mô tả Jira dễ đọc
+        // a. Ngắt đoạn sau các dấu chấm câu (Rất quan trọng)
+        String formattedText = cleanedText.replace(". ", ".\n\n");
+        formattedText = formattedText.replace("! ", "!\n\n");
+        formattedText = formattedText.replace("? ", "?\n\n");
+        // b. Thay thế các nhóm khoảng trắng lớn (nếu còn sót) thành 2 lần xuống dòng
+        formattedText = formattedText.replaceAll(" {3,}", "\n\n");
+        // c. Loại bỏ khoảng trắng ở đầu và cuối chuỗi
+        formattedText = formattedText.trim();
+        return formattedText;
     }
 }

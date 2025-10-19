@@ -5,6 +5,7 @@ import com.example.emailtojira.model.EmailDetail;
 import com.example.emailtojira.service.service.EmailService;
 import com.example.emailtojira.service.service.JiraService;
 import lombok.RequiredArgsConstructor;
+import org.jsoup.Jsoup;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,4 +58,6 @@ public class AutomationService {
 
         System.out.println("--- KẾT THÚC CHU TRÌNH TỰ ĐỘNG ---\n");
     }
+
+
 }
