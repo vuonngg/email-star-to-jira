@@ -177,7 +177,6 @@ public class EmailServiceImpl implements EmailService {
         if (appConfig.getEmailRefreshToken() == null || appConfig.getEmailRefreshToken().isEmpty()) {
             throw new RuntimeException("Refresh Token không tồn tại. Không thể làm mới token.");
         }
-
         // 1. Cấu hình Headers: Gửi dữ liệu dưới dạng x-www-form-urlencoded
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -213,14 +212,12 @@ public class EmailServiceImpl implements EmailService {
 
             System.out.println("[TOKEN] Access Token làm mới thành công. Hết hạn lúc: " + new java.util.Date(newExpiryTime));
 
-
         } catch (Exception e) {
             System.err.println("[TOKEN ERROR] Lỗi khi làm mới Access Token: " + e.getMessage());
-            // Ném lỗi Runtime để dừng xử lý nếu không làm mới được
+
             throw new RuntimeException("Không thể làm mới Access Token. Vui lòng kiểm tra Refresh Token và Client Keys.", e);
         }
     }
-
 
 
     public Message getEmailDetails(String messageId) throws IOException {
@@ -230,11 +227,10 @@ public class EmailServiceImpl implements EmailService {
     }
 
     private EmailDetail extractEmailData(Message message) {
-        // Lưu ý: Cần import com.google.api.services.gmail.model.MessagePartHeader;
         EmailDetail detail = new EmailDetail();
         detail.setId(message.getId());
 
-        // Trích xuất Header (Subject, From, To)
+        // Trích xuất Header
         if (message.getPayload() != null && message.getPayload().getHeaders() != null) {
             // Cần có import com.google.api.services.gmail.model.MessagePartHeader;
             for (com.google.api.services.gmail.model.MessagePartHeader header : message.getPayload().getHeaders()) {
@@ -246,7 +242,7 @@ public class EmailServiceImpl implements EmailService {
             }
         }
 
-        // Trích xuất Body/Content
+        // Trích xuất Body
         String emailBody = extractBodyFromPayload(message.getPayload());
         detail.setNoiDung(emailBody);
 
@@ -266,9 +262,9 @@ public class EmailServiceImpl implements EmailService {
             }
         }
 
-        // 2. Nếu là MULTIPART hoặc có PARTS (email có nhiều phần, cần duyệt đệ quy)
+        // 2. Nếu là MULTIPART hoặc có PARTS
         if (payload.getParts() != null) {
-            // TÁCH VÒNG LẶP: Ưu tiên tìm text/plain (thường là phần tử ở tầng ngoài cùng)
+            // TÁCH VÒNG LẶP: Ưu tiên tìm text/plain
             for (MessagePart part : payload.getParts()) {
                 if (part.getMimeType().equals("text/plain")) {
                     String result = extractBodyFromPayload(part); // Gọi đệ quy
@@ -279,12 +275,12 @@ public class EmailServiceImpl implements EmailService {
             // VÒNG LẶP THỨ HAI: Nếu không có text/plain, thử tìm text/html
             for (MessagePart part : payload.getParts()) {
                 if (part.getMimeType().equals("text/html")) {
-                    String result = extractBodyFromPayload(part); // Gọi đệ quy
+                    String result = extractBodyFromPayload(part);
                     if (!result.isEmpty()) return result;
                 }
             }
 
-            // VÒNG LẶP THỨ BA (QUAN TRỌNG): Nếu vẫn không tìm thấy, duyệt qua các phần tử phức tạp
+            // VÒNG LẶP THỨ BA : Nếu vẫn không tìm thấy, duyệt qua các phần tử phức tạp
             // (multipart/alternative, multipart/mixed, v.v.)
             for (MessagePart part : payload.getParts()) {
                 if (part.getParts() != null) {

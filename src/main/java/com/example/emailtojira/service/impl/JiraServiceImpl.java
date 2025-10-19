@@ -73,9 +73,7 @@ public class JiraServiceImpl implements JiraService {
         }
     }
 
-    /**
-     * Tạo Headers chứa Basic Authentication (Username:Token).
-     */
+
     private HttpHeaders createAuthHeaders() {
         HttpHeaders headers = new HttpHeaders();
 
@@ -89,9 +87,7 @@ public class JiraServiceImpl implements JiraService {
         return headers;
     }
 
-    /**
-     * Chuyển đổi dữ liệu từ EmailDetail sang mô hình JiraCreateTask.
-     */
+
     private JiraCreateTask buildJiraTaskFromEmail(EmailDetail detail) {
         // 1. Tạo Project
         JiraCreateTask.Project project = new JiraCreateTask.Project(

@@ -17,16 +17,12 @@ public class JiraCreateTask {
     @NoArgsConstructor
     public static class Fields {
 
-        // 1. Tiêu đề Task (từ email subject)
         private String summary;
 
-        // 2. Mô tả Task (từ email body)
         private String description;
 
-        // 3. Dự án mà Task thuộc về (ví dụ: PROJECT_KEY)
         private Project project;
 
-        // 4. Loại Task (ví dụ: Task, Bug, Story)
         private IssueType issuetype;
     }
 

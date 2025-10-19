@@ -41,8 +41,8 @@ public class InputRunner implements CommandLineRunner {
         config.setJiraToken(scanner.nextLine().trim());
 
 
-        System.out.println("\n--- THÔNG TIN EMAIL ---");
 
+        System.out.println("\n--- THÔNG TIN EMAIL ---");
 
         // 5. EMAIL API CLIENT ID
         System.out.print("5. EMAIL API CLIENT ID: ");
@@ -55,26 +55,22 @@ public class InputRunner implements CommandLineRunner {
         config.setEmailRefreshToken(scanner.nextLine().trim());
 
         System.out.println("-------------------------------------------\n");
-        // TẠO LUỒNG NỀN VÀ DÙNG DO-WHILE
+        // Tạo luồng mới dùng do wile để auto
         new Thread(() -> {
             try {
-                // Biến này sẽ kiểm soát lần chạy đầu tiên
                 boolean firstRun = true;
 
                 do {
-                    // Nếu KHÔNG phải là lần chạy đầu tiên (tức là sau khi đã chạy 1 lần), thì ngủ 1 phút
                     if (!firstRun) {
                         Thread.sleep(5000);
                     }
 
-                    // Gọi hàm chính: Chạy ngay lập tức trong lần đầu
+                 // gọi hàm chạy lần đầu
                     automationService.startConvertEmailToJira();
 
-                    // Đặt cờ là false sau lần chạy đầu tiên
                     firstRun = false;
 
-                } while (true); // Vòng lặp vô hạn
-
+                } while (true);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 System.err.println("Lỗi luồng lặp lại: " + e.getMessage());

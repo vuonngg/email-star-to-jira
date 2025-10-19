@@ -24,12 +24,12 @@ public class AppConfig {
     private String jiraToken;
     private String jiraProjectKey;
 
-    // --- Cấu hình Email API (Ví dụ: OAuth 2.0) ---
+    // Cấu hình Email API ) ---
     private String emailClientId;
     private String emailClientSecret;
-    // (Trong thực tế, bạn sẽ cần cả Refresh Token/Access Token, nhưng ta dùng Client ID/Secret cho mục đích demo cấu hình)
-    private String emailRefreshToken;  // MÃ DÀI HẠN: Lấy sau khi trao đổi Authorization Code lần đầu
-    private String emailAccessToken;   // MÃ NGẮN HẠN: Được làm mới liên tục
-    private long accessTokenExpiryTime = 0; // THỜI ĐIỂM HẾT HẠN: Dùng để kiểm tra xem có cần làm mới không
+
+    private String emailRefreshToken;  // ĐỂ LẤY TOKEN MỚI KHI HẾT HIỆU LỰC
+    private String emailAccessToken;   // MÃ NGẮN HẠN
+    private long accessTokenExpiryTime = 0; // THỜI ĐIỂM HẾT HẠN CỦA TOKEN
 
 }

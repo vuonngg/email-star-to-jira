@@ -9,8 +9,6 @@ import org.springframework.web.client.RestTemplate;
 public class RestTemplateConfig {
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
-        // Dùng RestTemplateBuilder để tạo đối tượng RestTemplate
-        // Đây là cách được khuyến nghị trong Spring Boot
         return builder.build();
     }
 }

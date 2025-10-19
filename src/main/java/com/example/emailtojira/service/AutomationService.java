@@ -13,22 +13,16 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class AutomationService {
-
-    // Giữ nguyên AppConfig (Mặc dù không dùng trực tiếp ở đây, nó hữu ích cho việc log hoặc cấu hình)
     private final AppConfig appConfig;
     private final EmailService emailService;
-    private final JiraService jiraService; // 👈 THÊM DEPENDENCY NÀY
+    private final JiraService jiraService;
 
-    // Tùy chọn: Dùng @Scheduled để chạy hàm này tự động theo lịch
-    // @Scheduled(fixedDelay = 600000) // Ví dụ: Chạy mỗi 10 phút (600,000 ms)
     public void startConvertEmailToJira(){
 
         System.out.println("--- BẮT ĐẦU CHU TRÌNH TỰ ĐỘNG ---");
-
         // 1. Lấy Access Token hợp lệ (sẽ refresh nếu cần)
         String validAccessToken = emailService.getValidAccessToken();
         System.out.println("--- AccessToken đã được cập nhật/kiểm tra. ---");
-
         // 2. Lấy danh sách email đã gắn sao
         List<EmailDetail> starredEmails = emailService.getStarEmails();
         System.out.println("--- Tìm thấy " + starredEmails.size() + " email cần xử lý.");
