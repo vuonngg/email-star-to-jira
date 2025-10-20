@@ -105,4 +105,4 @@ java -jar target/email-to-jira-automation.jar
 ```
 
 #### Sau khi khởi chạy, bạn sẽ phải nhập ngay thông tin cấu hình của Jira, Email và ứng dụng sẽ áp dụng các cấu hình đã cung cấp để bắt đầu chu trình kiểm tra và tạo Issue tự động.
-#### video demo: .....
+#### video demo: https://youtu.be/L5MkiUt2z-E

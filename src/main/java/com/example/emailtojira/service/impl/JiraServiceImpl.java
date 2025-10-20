@@ -114,7 +114,7 @@ public class JiraServiceImpl implements JiraService {
                 project,
                 issueType
         );
-        // 4. Tạo đối tượng Task hoàn chỉnh
+
         return new JiraCreateTask(fields);
     }
 
@@ -122,7 +122,7 @@ public class JiraServiceImpl implements JiraService {
         if (rawHtml == null || rawHtml.isEmpty()) {
             return "Nội dung email trống.";
         }
-        // 1. LỌC HTML VÀ CHUYỂN ENTITY: Jsoup không chỉ loại bỏ thẻ mà còn chuyển đổi
+        // 1. LỌC HTML VÀ CHUYỂN ENTITY
         String cleanText = org.jsoup.Jsoup.parse(rawHtml).text();
         // 2. LÀM SẠCH KÝ TỰ ĐIỀU KHIỂN & KHOẢNG TRẮNG DƯ THỪA
         // a. Loại bỏ các ký tự \r, \t, và nhiều khoảng trắng liên tiếp, giữ lại \n
